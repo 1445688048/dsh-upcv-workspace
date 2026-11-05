@@ -1,0 +1,60 @@
+{
+  "name": "dsh-upcv-workspace",
+  "version": "0.25.4",
+  "private": true,
+  "description": "DSH 求职工作台：AI 简历、模拟面试与岗位推荐，全部 AI 能力走宿主模型",
+  "license": "MIT",
+  "author": "fanyukun",
+  "type": "module",
+  "main": "./dsh/index.js",
+  "exports": {
+    ".": "./dsh/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "dsh/",
+    "server/",
+    "prompts/",
+    "lib/client.js",
+    "cordis.patch.yml",
+    "README.md",
+    "collector/",
+    "scripts/setup-collector.mjs"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "dsh-desktop-workbenches"
+      ]
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build-client.mjs",
+    "test": "node tests/llm.test.mjs && node tests/ai.test.mjs && node tests/routes.test.mjs && node tests/prompts.test.mjs && node tests/jobs.test.mjs && node tests/collector.test.mjs && node tests/bank-store.test.mjs && node tests/bank-dedup.test.mjs && node tests/bank-sampling.test.mjs && node tests/bank-gen.test.mjs && node tests/session-collect.test.mjs && node tests/sources.test.mjs && node tests/browser.test.mjs && node tests/jobs-ui.test.mjs && node tests/jd-align.test.mjs && node tests/interview-v2.test.mjs && node tests/resume-schema.test.mjs && node tests/panel-render.test.mjs",
+    "check": "node scripts/build-client.mjs && node scripts/check-client-boot.mjs && node tests/llm.test.mjs && node tests/ai.test.mjs && node tests/routes.test.mjs && node tests/prompts.test.mjs && node tests/jobs.test.mjs && node tests/collector.test.mjs && node tests/bank-store.test.mjs && node tests/bank-dedup.test.mjs && node tests/bank-sampling.test.mjs && node tests/bank-gen.test.mjs && node tests/session-collect.test.mjs && node tests/sources.test.mjs && node tests/browser.test.mjs && node tests/jobs-ui.test.mjs && node tests/jd-align.test.mjs && node tests/interview-v2.test.mjs && node tests/resume-schema.test.mjs && node tests/panel-render.test.mjs && node scripts/check-workbench-package.mjs",
+    "collector:setup": "node scripts/setup-collector.mjs",
+    "pack": "node scripts/build-client.mjs && pnpm pack",
+    "install:local": "node scripts/install-local.mjs"
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.4"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": ">=4.0.1 <5.0.0-0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1445688048/dsh-upcv-workspace.git"
+  },
+  "devDependencies": {
+    "jsdom": "^30.1.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

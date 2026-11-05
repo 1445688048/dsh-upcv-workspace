@@ -1,0 +1,8 @@
+# 作为 DSH profile bundle 安装时挂载本工作台的服务端插件。
+# name 必须是 npm 包名（Node 才能解析到已安装代码）；root 是本工作台在 DSH home
+# 下的自有数据目录，保证用户数据只写在这里。
+- insert:
+    - id: dsh-upcv-workspace
+      name: dsh-upcv-workspace
+      config:
+        root: !!js dshHomePath('dsh-upcv-workspace')

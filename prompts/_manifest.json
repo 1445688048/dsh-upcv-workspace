@@ -1,0 +1,288 @@
+{
+  "prompts": {
+    "interview-questions-jd": {
+      "title": "JD 出题",
+      "order": 10,
+      "description": "JD 原文 + 标签 + 题量 → 面试题 JSON 数组（question/tags/points/hint）。",
+      "variables": [
+        {
+          "name": "jdText",
+          "description": "岗位 JD 原文（选自岗位库或粘贴）"
+        },
+        {
+          "name": "tags",
+          "description": "指定考察的知识点标签（多行或顿号分隔，可为空）"
+        },
+        {
+          "name": "topics",
+          "description": "内置标签词表节选（引导模型选用）"
+        },
+        {
+          "name": "count",
+          "description": "要生成的题目数量"
+        }
+      ]
+    },
+    "interview-questions-resume": {
+      "title": "简历出题",
+      "order": 11,
+      "description": "简历内容 + 标签 + 题量 → STAR 追问链面试题 JSON 数组。",
+      "variables": [
+        {
+          "name": "resumeText",
+          "description": "候选人简历内容（结构化压平后的文本）"
+        },
+        {
+          "name": "tags",
+          "description": "指定考察的知识点标签（可为空）"
+        },
+        {
+          "name": "topics",
+          "description": "内置标签词表节选（引导模型选用）"
+        },
+        {
+          "name": "count",
+          "description": "要生成的题目数量"
+        }
+      ]
+    },
+    "resume-optimize": {
+      "title": "简历优化",
+      "order": 30,
+      "description": "目标岗位 + 原始信息 → 定制简历 JSON 对象（summary/sections）。",
+      "variables": [
+        {
+          "name": "targetJob",
+          "description": "目标岗位名称"
+        },
+        {
+          "name": "name",
+          "description": "候选人姓名，缺省「候选人」"
+        },
+        {
+          "name": "experience",
+          "description": "工作/实习经历原文，未提供时为「（未提供）」"
+        },
+        {
+          "name": "project",
+          "description": "项目经历原文，未提供时为「（未提供）」"
+        },
+        {
+          "name": "skills",
+          "description": "技能原文，未提供时为「（未提供）」"
+        },
+        {
+          "name": "education",
+          "description": "教育经历原文，未提供时为「（未提供）」"
+        }
+      ]
+    },
+    "interview-report": {
+      "title": "面试评估报告",
+      "order": 40,
+      "description": "岗位 + 逐题问答 transcript → 多维评分 JSON 对象。",
+      "variables": [
+        {
+          "name": "jobTitle",
+          "description": "目标岗位名称，缺省「目标岗位」"
+        },
+        {
+          "name": "transcript",
+          "description": "逐题问答拼成的多行文本（一个变量整体注入）"
+        }
+      ]
+    },
+    "jd-align": {
+      "title": "JD 对齐",
+      "order": 50,
+      "description": "JD 原文 + 简历 → 结构化要求清单 + 逐条覆盖判断 + 关键词命中/缺失 + ATS 分。",
+      "variables": [
+        {
+          "name": "targetJob",
+          "description": "目标岗位名称"
+        },
+        {
+          "name": "jdText",
+          "description": "岗位 JD 原文"
+        },
+        {
+          "name": "resumeText",
+          "description": "候选人简历或经历原文"
+        }
+      ]
+    },
+    "interview-followup": {
+      "title": "面试追问与判定",
+      "order": 60,
+      "description": "最近一轮问答 + 当前题要点 → 决定追问还是推进，推进时给出逐题判定（verdict/hitPoints/missedPoints/betterApproach）。",
+      "variables": [
+        {
+          "name": "jobTitle",
+          "description": "目标岗位名称"
+        },
+        {
+          "name": "currentQuestion",
+          "description": "当前题目题干"
+        },
+        {
+          "name": "points",
+          "description": "当前题的判定参考要点（多行文本）"
+        },
+        {
+          "name": "bestPractice",
+          "description": "当前题的进阶要点/最佳实践层（多行文本，可为「（无）」）"
+        },
+        {
+          "name": "asked",
+          "description": "已经问过的题目清单（多行文本）"
+        },
+        {
+          "name": "transcript",
+          "description": "最近一轮问答（多行文本）"
+        },
+        {
+          "name": "remaining",
+          "description": "剩余主线题数"
+        },
+        {
+          "name": "followupsUsed",
+          "description": "当前题已经追问过的次数（0-2）"
+        }
+      ]
+    },
+    "resume-import": {
+      "title": "简历导入解析",
+      "order": 5,
+      "description": "简历文本（PDF/DOCX 提取或粘贴）→ JSON Resume 结构化结果。",
+      "variables": [
+        {
+          "name": "resumeText",
+          "description": "简历纯文本原文"
+        },
+        {
+          "name": "targetJob",
+          "description": "目标岗位（可选，仅用于判断重点）"
+        }
+      ]
+    },
+    "bank-kg": {
+      "title": "简历知识点提取",
+      "order": 13,
+      "description": "简历内容 → 知识点清单 JSON 对象（summary + points[{tag,note}]），供题库初始化确认。",
+      "variables": [
+        {
+          "name": "resumeText",
+          "description": "候选人简历内容（结构化压平后的文本）"
+        },
+        {
+          "name": "topics",
+          "description": "内置标签词表节选（引导规范写法）"
+        }
+      ]
+    },
+    "bank-generate": {
+      "title": "知识点出题（题库扩充）",
+      "order": 14,
+      "description": "单个知识点 + 已有题干供给 → 覆盖深度阶梯的通用题 JSON 数组（含 concept 考点）。",
+      "variables": [
+        {
+          "name": "topic",
+          "description": "本次出题的知识点标签"
+        },
+        {
+          "name": "note",
+          "description": "知识点出处/上下文（简历里的哪段经历）"
+        },
+        {
+          "name": "existing",
+          "description": "题库已有题干列表（去重供给，可为「（暂无）」）"
+        },
+        {
+          "name": "count",
+          "description": "要生成的题目数量"
+        },
+        {
+          "name": "topics",
+          "description": "内置标签词表节选（引导规范写法）"
+        }
+      ]
+    },
+    "bank-scaffold": {
+      "title": "连错降阶台阶题",
+      "order": 15,
+      "description": "连续答错 3 次的原题 + 缺失要点 → 前置概念台阶题 JSON 数组。",
+      "variables": [
+        {
+          "name": "question",
+          "description": "连续答错的原题题干"
+        },
+        {
+          "name": "topic",
+          "description": "知识点标签"
+        },
+        {
+          "name": "missedPoints",
+          "description": "三次都缺失的要点（多行）"
+        },
+        {
+          "name": "existing",
+          "description": "题库已有题干列表（去重供给）"
+        },
+        {
+          "name": "count",
+          "description": "要生成的台阶题数量"
+        }
+      ]
+    },
+    "bank-gap": {
+      "title": "最佳实践缺口专题题",
+      "order": 16,
+      "description": "知识点 + 反复出现的更优做法缺口 → practice 专题题 JSON 数组。",
+      "variables": [
+        {
+          "name": "topic",
+          "description": "知识点标签"
+        },
+        {
+          "name": "gaps",
+          "description": "反复出现的更优做法缺口（多行）"
+        },
+        {
+          "name": "existing",
+          "description": "题库已有题干列表（去重供给）"
+        },
+        {
+          "name": "count",
+          "description": "要生成的专题题数量"
+        }
+      ]
+    },
+    "bank-variant": {
+      "title": "同考点变体题",
+      "order": 17,
+      "description": "原题 + 判定要点 → 换问法的变体题 JSON 数组（防背答案）。",
+      "variables": [
+        {
+          "name": "question",
+          "description": "原题题干"
+        },
+        {
+          "name": "points",
+          "description": "原题判定要点（多行，原样保留）"
+        },
+        {
+          "name": "topic",
+          "description": "知识点标签"
+        },
+        {
+          "name": "existing",
+          "description": "题库已有题干列表（去重供给）"
+        },
+        {
+          "name": "count",
+          "description": "要生成的变体数量"
+        }
+      ]
+    }
+  }
+}

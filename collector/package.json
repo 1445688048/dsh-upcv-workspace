@@ -1,0 +1,17 @@
+{
+  "name": "dsh-upcv-collector",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "岗位检索采集器：Playwright 独立安装，只属于 collector 目录，不进插件依赖与 tgz。",
+  "main": "./collector.js",
+  "bin": {
+    "dsh-upcv-collector": "./collector.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
