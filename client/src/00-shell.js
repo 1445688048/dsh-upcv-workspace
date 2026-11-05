@@ -13,7 +13,7 @@ window.__ModuleLoader__.load({
     const NS = 'upcv.workspace';
 
     // ========== 服务端 API（exact /api 路由，见 server/api.js）==========
-    const CLIENT_VERSION = '0.25.4';
+    const CLIENT_VERSION = '0.25.5';
     const API_BASE = '/api/dsh-upcv-workspace';
     const ACTION_HEADER = 'x-dsh-upcv-action';
 

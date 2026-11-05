@@ -51,7 +51,7 @@ function resumeTextOf(record) {
 export const BASE = '/api/dsh-upcv-workspace';
 
 /** 界面会显示这个版本号，用于确认当前加载的是哪一版客户端。 */
-export const BUILD_VERSION = '0.25.4';
+export const BUILD_VERSION = '0.25.5';
 
 /** 变更请求必须带这个自定义请求头（自定义头会触发预检，从而挡住跨站页面）。 */
 export const ACTION_HEADER = 'x-dsh-upcv-action';
@@ -732,7 +732,18 @@ export function createHandlers({ llm, available, store = null, chromePath = '', 
       POST: async (req, res) => {
         if (store === null) { json(res, 500, { ok: false, error: 'store-unavailable', message: '没有配置数据根目录。' }); return; }
         const body = await readJsonBody(req);
-        const result = store.upsert(String(body.collection ?? ''), body.item);
+        const collection = String(body.collection ?? '');
+        let item = body.item;
+        // 简历字段保护（V0.25.5）：编辑器只回写自己的字段，会把知识点档案整个抹掉——
+        // 入参缺 knowledgeProfile 且库里现存时，原样保留（真实更新走 resume-finish，必带该字段）
+        if (collection === 'resumes' && item !== null && typeof item === 'object' && !Array.isArray(item)
+          && item.knowledgeProfile === undefined && typeof item.id === 'string' && item.id !== '') {
+          const existing = store.list('resumes').items.find((entry) => String(entry?.id) === item.id);
+          if (existing !== undefined && existing.knowledgeProfile !== undefined) {
+            item = { ...item, knowledgeProfile: existing.knowledgeProfile };
+          }
+        }
+        const result = store.upsert(collection, item);
         if (result.error !== undefined) { json(res, STATUS[result.error] ?? 400, { ok: false, error: result.error }); return; }
         json(res, 200, { ok: true, item: result.item, count: result.count });
       },

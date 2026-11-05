@@ -1,6 +1,6 @@
 {
   "name": "dsh-upcv-workspace",
-  "version": "0.25.4",
+  "version": "0.25.5",
   "private": true,
   "description": "DSH 求职工作台：AI 简历、模拟面试与岗位推荐，全部 AI 能力走宿主模型",
   "license": "MIT",

@@ -902,4 +902,34 @@ await check('题库标签词表 /bank/topics：聚合实际标签+题量，排�
   }
 });
 
+await check('简历字段保护 /store/save：编辑器回写缺 knowledgeProfile 时保留现存档案', async () => {
+  const root3 = mkdtempSync(join(tmpdir(), 'upcv-routes-prot-'));
+  const store3 = createStore(root3);
+  store3.upsert('resumes', { id: 'r1', title: 'A', source: 'import', data: {}, knowledgeProfile: { points: [{ tag: 'Redis', note: '' }], version: 2 } });
+  const protHost = buildHost(undefined, false, store3);
+  await new Promise((resolve) => protHost.listen(0, '127.0.0.1', resolve));
+  try {
+    const port3 = protHost.address().port;
+    const post3 = (payload) => fetch('http://127.0.0.1:' + port3 + ROUTES.storeSave, {
+      method: 'POST', headers: { 'content-type': 'application/json', [ACTION_HEADER]: '1' }, body: JSON.stringify(payload),
+    });
+    // 编辑器式保存：不带 knowledgeProfile → 档案保留
+    const r1 = await (await post3({ collection: 'resumes', item: { id: 'r1', title: 'A2', source: 'import', data: {} } })).json();
+    assert.equal(r1.ok, true, '保存成功');
+    assert.equal(r1.item.knowledgeProfile.version, 2, '缺字段时保留现存档案');
+    assert.equal(r1.item.title, 'A2', '本字段正常更新');
+    // 显式带 knowledgeProfile → 以新值为准（resume-finish 路径）
+    const r2 = await (await post3({ collection: 'resumes', item: { id: 'r1', title: 'A2', source: 'import', data: {}, knowledgeProfile: { points: [{ tag: 'MQ', note: '' }], version: 3 } } })).json();
+    assert.equal(r2.ok, true, '带档案保存成功');
+    assert.equal(r2.item.knowledgeProfile.version, 3, '显式档案生效');
+    assert.equal(r2.item.knowledgeProfile.points[0].tag, 'MQ', '显式档案内容生效');
+    // 新建简历无现存档案 → 不凭空造
+    const r3 = await (await post3({ collection: 'resumes', item: { id: 'r2', title: 'B', source: 'blank', data: {} } })).json();
+    assert.equal(r3.ok, true, '新建成功');
+    assert.equal(r3.item.knowledgeProfile, undefined, '无现存档案不注入');
+  } finally {
+    await new Promise((resolve) => protHost.close(resolve));
+  }
+});
+
 console.log(nl + passed + ' 项通过' + (process.exitCode ? '，存在失败' : ''));

@@ -97,7 +97,7 @@ Evarlio 模板本身的许可以其服务条款为准。
 上架后，在 DSH Desktop 的「工作台 → 市场」中搜索「求职工作台」安装。市场按 GitHub Release 的 `dsh-upcv-workspace.tgz` 探测并锁定版本；安装后完全退出并重新打开 DSH Desktop 生效。
 
 - 已验证宿主：DSH Desktop 0.12.1，macOS 26.6（arm64）。
-- 安装包版本：0.25.4；`package.json` 提供 `dsh.bundle.patch`、包含 `dsh-desktop-workbenches` 的 `dsh.client.inject` 与真实存在的 `exports["./client"]`。
+- 安装包版本：0.25.5；`package.json` 提供 `dsh.bundle.patch`、包含 `dsh-desktop-workbenches` 的 `dsh.client.inject` 与真实存在的 `exports["./client"]`。
 - 源码安装不是推荐路径：仓库已提交构建产物 `lib/client.js`，但市场不会代跑构建。
 
 ## 开发
@@ -113,7 +113,7 @@ pnpm pack           # 生成 dsh-upcv-workspace-<version>.tgz
 本地安装到当前 DSH Desktop（先完全退出应用）：
 
 ```bash
-node scripts/install-local.mjs dsh-upcv-workspace-0.25.4.tgz
+node scripts/install-local.mjs dsh-upcv-workspace-0.25.5.tgz
 ```
 
 `scripts/install-local.mjs` 按 DSH 的 generation/profile 投影方式写入，重启 Desktop 后生效；它只适用于本机开发。
